@@ -1,0 +1,16 @@
+E. coli-Gen,Mensch-Gen,E. coli SL-Kandidat?,Orthologe? (Lehrbuchwissen),Erklärung
+ada,ADA,nein,Zufall,E. coli: DNA-Reparatur (Methyltransferase); Mensch ADA: Adenosin-Desaminase. Echtes Gegenstück wäre MGMT
+adk,ADK,nein,Zufall,E. coli: Adenylatkinase; Mensch ADK: Adenosinkinase (andere Reaktion)
+chiA,CHIA,ja,unklar,ohne Orthologie-Daten nicht prüfbar
+clpX,CLPX,nein,echt,beide: Untereinheit der Clp-Protease (beim Menschen in den Mitochondrien)
+cybB,CYBB,nein,Zufall,E. coli: Cytochrom b561; Mensch CYBB: NADPH-Oxidase NOX2
+hscB,HSCB,nein,echt,beide: Co-Chaperon für Eisen-Schwefel-Cluster
+mak,MAK,nein,Zufall,E. coli: Zucker-Kinase; Mensch MAK: Proteinkinase in Keimzellen
+napG,NAPG,nein,Zufall,E. coli: Nitrat-Reduktase-Untereinheit; Mensch NAPG: Vesikeltransport
+polB,POLB,nein,Zufall,E. coli: DNA-Polymerase II; Mensch POLB: Polymerase β (andere Familie)
+ppiA,PPIA,nein,verwandt,beide Cyclophiline (gleiche Proteinfamilie)
+ppiB,PPIB,nein,verwandt,beide Cyclophiline (gleiche Proteinfamilie)
+ppiC,PPIC,nein,Zufall,E. coli: Parvulin; Mensch PPIC: Cyclophilin (andere Proteinfamilie)
+pth,PTH,nein,Zufall,E. coli: Peptidyl-tRNA-Hydrolase; Mensch PTH: Parathormon
+rpe,RPE,nein,echt,beide: Ribulose-5-phosphat-Epimerase (Zuckerstoffwechsel)
+xylB,XYLB,nein,echt,beide: Xylulokinase

@@ -1,0 +1,749 @@
+{
+ "sl_file": "BIOGRID-SYSTEM-Synthetic_Lethality-5.0.263.tab3.txt.csv",
+ "overview": {
+  "Mensch": {
+   "Interaktionen gesamt": 1090297,
+   "davon physikalisch": 1072725,
+   "davon genetisch": 17572,
+   "SL explizit (MI:2370)": 2255,
+   "negativ genetisch (MI:2373)": 9615,
+   "Gene mit SL": 1954
+  },
+  "Ratte": {
+   "Interaktionen gesamt": 6857,
+   "davon physikalisch": 6851,
+   "davon genetisch": 6,
+   "SL explizit (MI:2370)": 0,
+   "negativ genetisch (MI:2373)": 0,
+   "Gene mit SL": 0
+  },
+  "E. coli K-12": {
+   "Interaktionen gesamt": 201573,
+   "davon physikalisch": 15076,
+   "davon genetisch": 186497,
+   "SL explizit (MI:2370)": 0,
+   "negativ genetisch (MI:2373)": 97586,
+   "Gene mit SL": 0
+  }
+ },
+ "org_counts": [
+  [
+   "Saccharomyces cerevisiae (S288c)",
+   17777
+  ],
+  [
+   "Homo sapiens",
+   2255
+  ],
+  [
+   "Schizosaccharomyces pombe (972h)",
+   1643
+  ],
+  [
+   "Mus musculus",
+   38
+  ],
+  [
+   "Drosophila melanogaster",
+   20
+  ],
+  [
+   "Arabidopsis thaliana (Columbia)",
+   10
+  ],
+  [
+   "Homo sapiens  ×  Saccharomyces cerevisiae (S288c)",
+   9
+  ],
+  [
+   "Candida albicans (SC5314)",
+   5
+  ],
+  [
+   "Gallus gallus",
+   4
+  ],
+  [
+   "Emericella nidulans (FGSC A4)",
+   3
+  ],
+  [
+   "Homo sapiens  ×  Mus musculus",
+   3
+  ],
+  [
+   "Saccharomyces cerevisiae (S288c)  ×  Homo sapiens",
+   2
+  ],
+  [
+   "Escherichia coli (K12/MG1655)  ×  Saccharomyces cerevisiae (S288c)",
+   1
+  ],
+  [
+   "Caenorhabditis elegans",
+   1
+  ]
+ ],
+ "human": {
+  "rows": 2255,
+  "pairs": 2219,
+  "genes": 1954,
+  "studies": 34,
+  "pairs_multi": 36,
+  "ht_pct": 83.63636363636363,
+  "degree_bins": [
+   [
+    "1 Partner",
+    1759
+   ],
+   [
+    "2 Partner",
+    112
+   ],
+   [
+    "3–5",
+    43
+   ],
+   [
+    "6–20",
+    29
+   ],
+   [
+    "21–100",
+    7
+   ],
+   [
+    "über 100",
+    4
+   ]
+  ],
+  "top_genes": [
+   [
+    "KRAS",
+    740
+   ],
+   [
+    "CSK",
+    685
+   ],
+   [
+    "FBXW7",
+    122
+   ],
+   [
+    "ETAA1",
+    120
+   ],
+   [
+    "ATR",
+    64
+   ],
+   [
+    "PTAR1",
+    60
+   ],
+   [
+    "ATRX",
+    58
+   ],
+   [
+    "TP53",
+    52
+   ],
+   [
+    "PIK3CA",
+    34
+   ],
+   [
+    "CHEK1",
+    32
+   ],
+   [
+    "WEE1",
+    26
+   ],
+   [
+    "TSSC1",
+    20
+   ]
+  ],
+  "methods": [
+   [
+    "CRISPR-Knockout",
+    1305
+   ],
+   [
+    "RNA-Interferenz (sh/siRNA)",
+    461
+   ],
+   [
+    "Medikament + Knockdown",
+    263
+   ],
+   [
+    "nicht angegeben",
+    226
+   ]
+  ],
+  "studies_top": [
+   [
+    "Xiao T (2018)",
+    685
+   ],
+   [
+    "Martin TD (2017)",
+    418
+   ],
+   [
+    "Luo J (2009)",
+    333
+   ],
+   [
+    "Srivas R (2016)",
+    176
+   ],
+   [
+    "Blomen VA (2015)",
+    133
+   ],
+   [
+    "Bailey ML (2015)",
+    120
+   ],
+   [
+    "Achuthankutty D (2019)",
+    120
+   ],
+   [
+    "Liang J (2020)",
+    58
+   ]
+  ],
+  "cell_lines": [
+   [
+    "nicht angegeben",
+    "–",
+    766,
+    756,
+    "KRAS",
+    28
+   ],
+   [
+    "T47D",
+    "Brustkrebs",
+    685,
+    685,
+    "CSK",
+    1
+   ],
+   [
+    "DLD-1",
+    "Darmkrebs (KRAS-mutiert)",
+    383,
+    383,
+    "KRAS",
+    1
+   ],
+   [
+    "HeLa",
+    "Gebärmutterhalskrebs",
+    296,
+    294,
+    "ETAA1",
+    2
+   ],
+   [
+    "PLC/PRF/5",
+    "Leberkrebs",
+    58,
+    58,
+    "ATRX",
+    1
+   ],
+   [
+    "HCT116",
+    "Darmkrebs (KRAS-mutiert)",
+    45,
+    45,
+    "KRAS",
+    1
+   ],
+   [
+    "UM-SCC-47",
+    "Kopf-Hals-Krebs (HPV16+)",
+    32,
+    32,
+    "PIK3CA",
+    1
+   ]
+  ],
+  "pairs_multi_study_pct": 1.2618296529968454,
+  "pairs_multi_cellline": 10,
+  "old_file_sl": 2151
+ },
+ "ecoli": {
+  "genes": 4244,
+  "hist": {
+   "edges": [
+    -25.25,
+    -24.75,
+    -24.25,
+    -23.75,
+    -23.25,
+    -22.75,
+    -22.25,
+    -21.75,
+    -21.25,
+    -20.75,
+    -20.25,
+    -19.75,
+    -19.25,
+    -18.75,
+    -18.25,
+    -17.75,
+    -17.25,
+    -16.75,
+    -16.25,
+    -15.75,
+    -15.25,
+    -14.75,
+    -14.25,
+    -13.75,
+    -13.25,
+    -12.75,
+    -12.25,
+    -11.75,
+    -11.25,
+    -10.75,
+    -10.25,
+    -9.75,
+    -9.25,
+    -8.75,
+    -8.25,
+    -7.75,
+    -7.25,
+    -6.75,
+    -6.25,
+    -5.75,
+    -5.25,
+    -4.75,
+    -4.25,
+    -3.75,
+    -3.25,
+    -2.75,
+    -2.25,
+    -1.75,
+    -1.25,
+    -0.75,
+    -0.25,
+    0.25
+   ],
+   "counts": [
+    3,
+    1,
+    2,
+    2,
+    3,
+    3,
+    2,
+    5,
+    10,
+    14,
+    25785,
+    34,
+    42,
+    47,
+    45,
+    56,
+    65,
+    56,
+    81,
+    76,
+    111,
+    125,
+    164,
+    296,
+    468,
+    609,
+    622,
+    675,
+    739,
+    805,
+    918,
+    970,
+    974,
+    1092,
+    1304,
+    1567,
+    1863,
+    2223,
+    2533,
+    3072,
+    3889,
+    5146,
+    7191,
+    8424,
+    5196,
+    7888,
+    6329,
+    1969,
+    1494,
+    573,
+    2025
+   ]
+  },
+  "thresholds": [
+   {
+    "Schwelle": "Score ≤ -2",
+    "Genpaare": 90331,
+    "Gene": 3939
+   },
+   {
+    "Schwelle": "Score ≤ -3",
+    "Genpaare": 74118,
+    "Gene": 3939
+   },
+   {
+    "Schwelle": "Score ≤ -5",
+    "Genpaare": 49209,
+    "Gene": 3603
+   },
+   {
+    "Schwelle": "Score ≤ -10",
+    "Genpaare": 31379,
+    "Gene": 2467
+   },
+   {
+    "Schwelle": "Score ≤ -20",
+    "Genpaare": 25813,
+    "Gene": 848
+   }
+  ],
+  "cand_pairs": 25813,
+  "cand_genes": 848,
+  "top_genes": [
+   [
+    "caiD",
+    462
+   ],
+   [
+    "ptsH",
+    377
+   ],
+   [
+    "ybeX",
+    371
+   ],
+   [
+    "yfgA",
+    289
+   ],
+   [
+    "yjhR",
+    289
+   ],
+   [
+    "fliL",
+    246
+   ],
+   [
+    "wzb",
+    245
+   ],
+   [
+    "yjeI",
+    242
+   ],
+   [
+    "wzxC",
+    234
+   ],
+   [
+    "acrD",
+    232
+   ],
+   [
+    "dut",
+    231
+   ],
+   [
+    "ackA",
+    231
+   ]
+  ],
+  "degree_bins": [
+   [
+    "1 Partner",
+    27
+   ],
+   [
+    "2 Partner",
+    4
+   ],
+   [
+    "3–5",
+    3
+   ],
+   [
+    "6–20",
+    89
+   ],
+   [
+    "21–100",
+    598
+   ],
+   [
+    "über 100",
+    127
+   ]
+  ],
+  "studies": [
+   [
+    "Babu M (2011)",
+    47678,
+    -23.423,
+    -20.0000002,
+    -2.0001
+   ],
+   [
+    "Babu M (2014)",
+    24960,
+    -30.924,
+    -4.72776,
+    -3.38787
+   ],
+   [
+    "Gagarinova A (2016)",
+    2668,
+    -1.017548119,
+    -0.15973846,
+    -0.099945541
+   ],
+   [
+    "Gagarinova A (2022)",
+    8121,
+    -20.0,
+    -1.965268955,
+    -0.931307466
+   ],
+   [
+    "Kumar A (2016)",
+    14159,
+    -20.25,
+    -2.9,
+    -2.0
+   ]
+  ]
+ },
+ "rat": {
+  "partners": [
+   [
+    "Ratte × Ratte",
+    6857
+   ],
+   [
+    "Ratte × Mensch",
+    1943
+   ],
+   [
+    "Ratte × Maus",
+    1237
+   ],
+   [
+    "Ratte × andere",
+    136
+   ]
+  ],
+  "types": [
+   [
+    "physical association",
+    5689
+   ],
+   [
+    "direct interaction",
+    984
+   ],
+   [
+    "colocalization",
+    154
+   ],
+   [
+    "association",
+    24
+   ],
+   [
+    "phenotypic suppression",
+    5
+   ],
+   [
+    "phenotypic enhancement",
+    1
+   ]
+  ],
+  "genes": 3639,
+  "sl_genes_in_rat": 527,
+  "human_sl_genes": 1954,
+  "pairs_in_rat": 517,
+  "human_pairs": 2219
+ },
+ "mapping": {
+  "ecoli_same_name_any": 108,
+  "ecoli_same_name_sl": 15,
+  "name_table": [
+   [
+    "ada",
+    "ADA",
+    "nein",
+    "Zufall",
+    "E. coli: DNA-Reparatur (Methyltransferase); Mensch ADA: Adenosin-Desaminase. Echtes Gegenstück wäre MGMT"
+   ],
+   [
+    "adk",
+    "ADK",
+    "nein",
+    "Zufall",
+    "E. coli: Adenylatkinase; Mensch ADK: Adenosinkinase (andere Reaktion)"
+   ],
+   [
+    "chiA",
+    "CHIA",
+    "ja",
+    "unklar",
+    "ohne Orthologie-Daten nicht prüfbar"
+   ],
+   [
+    "clpX",
+    "CLPX",
+    "nein",
+    "echt",
+    "beide: Untereinheit der Clp-Protease (beim Menschen in den Mitochondrien)"
+   ],
+   [
+    "cybB",
+    "CYBB",
+    "nein",
+    "Zufall",
+    "E. coli: Cytochrom b561; Mensch CYBB: NADPH-Oxidase NOX2"
+   ],
+   [
+    "hscB",
+    "HSCB",
+    "nein",
+    "echt",
+    "beide: Co-Chaperon für Eisen-Schwefel-Cluster"
+   ],
+   [
+    "mak",
+    "MAK",
+    "nein",
+    "Zufall",
+    "E. coli: Zucker-Kinase; Mensch MAK: Proteinkinase in Keimzellen"
+   ],
+   [
+    "napG",
+    "NAPG",
+    "nein",
+    "Zufall",
+    "E. coli: Nitrat-Reduktase-Untereinheit; Mensch NAPG: Vesikeltransport"
+   ],
+   [
+    "polB",
+    "POLB",
+    "nein",
+    "Zufall",
+    "E. coli: DNA-Polymerase II; Mensch POLB: Polymerase β (andere Familie)"
+   ],
+   [
+    "ppiA",
+    "PPIA",
+    "nein",
+    "verwandt",
+    "beide Cyclophiline (gleiche Proteinfamilie)"
+   ],
+   [
+    "ppiB",
+    "PPIB",
+    "nein",
+    "verwandt",
+    "beide Cyclophiline (gleiche Proteinfamilie)"
+   ],
+   [
+    "ppiC",
+    "PPIC",
+    "nein",
+    "Zufall",
+    "E. coli: Parvulin; Mensch PPIC: Cyclophilin (andere Proteinfamilie)"
+   ],
+   [
+    "pth",
+    "PTH",
+    "nein",
+    "Zufall",
+    "E. coli: Peptidyl-tRNA-Hydrolase; Mensch PTH: Parathormon"
+   ],
+   [
+    "rpe",
+    "RPE",
+    "nein",
+    "echt",
+    "beide: Ribulose-5-phosphat-Epimerase (Zuckerstoffwechsel)"
+   ],
+   [
+    "xylB",
+    "XYLB",
+    "nein",
+    "echt",
+    "beide: Xylulokinase"
+   ]
+  ],
+  "both_named": 9,
+  "conserved": 0,
+  "both_named_list": [
+   [
+    "acpP",
+    "dut",
+    -20.0000002
+   ],
+   [
+    "acpT",
+    "dut",
+    -20.0000002
+   ],
+   [
+    "chiA",
+    "dgkA",
+    -20.0000002
+   ],
+   [
+    "chiA",
+    "mpl",
+    -20.0000002
+   ],
+   [
+    "dut",
+    "ispD",
+    -20.0000002
+   ],
+   [
+    "dut",
+    "purB",
+    -20.0000002
+   ],
+   [
+    "lpp",
+    "fadD",
+    -20.0000002
+   ],
+   [
+    "galE",
+    "lpp",
+    -20.0000002
+   ],
+   [
+    "galT",
+    "ttk",
+    -20.0000002
+   ]
+  ]
+ }
+}
