@@ -1,0 +1,22 @@
+# --- BioGRID data (downloaded by ./install.sh, too large for git) ---
+BIOGRID-*/
+BIOGRID-*.zip
+*.mitab.txt
+*.mitab.txt.csv
+*.tab3.txt
+*.tab3.txt.csv
+*.tab3.csv
+
+# --- Archives / temp files ---
+*.zip
+*.tmp
+*.log
+
+# --- IDE (shared .idea project files stay tracked; see .idea/.gitignore) ---
+*.iml~
+.vscode/
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+*~
