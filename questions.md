@@ -1,0 +1,2 @@
+- Was ist organism interactor
+- Was ist der Unterschied zwischen normalen interactor und organsim interactor
