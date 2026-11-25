@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
 #
-# Downloads the BioGRID data files this project needs.
+# Downloads all data files this project needs (BioGRID, OMA orthology, essentiality).
 #
 # Our species: Rattus norvegicus, Escherichia coli K-12 (all K12 strains) and Homo sapiens.
 #
-#   1. BIOGRID-SYSTEM-LATEST.tab3.zip       -> only the Synthetic_Lethality file
-#   2. BIOGRID-ORGANISM-4.4.225.mitab.zip   -> only the files for our organisms
+#   1. Synthetic lethality: BIOGRID-SYSTEM-LATEST.tab3.zip     -> only the Synthetic_Lethality file
+#   2. Interactions:        BIOGRID-ORGANISM-4.4.225.mitab.zip -> only the files for our organisms
+#   3. Orthology:           OMA pairs Homo sapiens <-> Rattus norvegicus / E. coli K-12 (MG1655), CSV with
+#                           Entrez Gene IDs (the ID BioGRID uses) -- done by oma_pairs.py
+#   4. Essentiality:        G-HumanEssential.tsv (SNAP BioData)
 #
 # Only the needed files are extracted; the zips are deleted afterwards.
-# Like txt_to_csv.sh, every extracted file gets a ".csv" suffix appended.
+# BioGRID files get a ".csv" suffix appended (like the old txt_to_csv.sh); they stay TAB-separated.
 #
 # Usage:  ./install.sh            (run from anywhere; files land next to this script)
 #         ./install.sh --force    (re-download even if the files already exist)
 #
-# Requirements: curl or wget, unzip.  ~350 MB download, ~1.1 GB on disk (Homo sapiens alone is ~1 GB).
+# Requirements: curl or wget, unzip, gzip, python3.  ~400 MB download, ~1.1 GB on disk (Homo sapiens alone is ~1 GB).
 
 set -euo pipefail
 
@@ -35,6 +38,15 @@ ORGANISM_PATTERNS=(
     "BIOGRID-ORGANISM-Homo_sapiens-*.mitab.txt"
 )
 
+# OMA genome codes (https://omabrowser.org/api/genome/<CODE>/). ECOLI = E. coli K-12 substr. MG1655.
+OMA_DIR="OMA-Orthology"
+OMA_BASE_GENOME="HUMAN"
+OMA_OTHER_GENOMES=(RATNO ECOLI)
+
+ESSENTIAL_URL="https://snap.stanford.edu/biodata/datasets/10033/files/G-HumanEssential.tsv.gz"
+ESSENTIAL_DIR="Essentiality"
+ESSENTIAL_FILE="G-HumanEssential.tsv"
+
 FORCE=0
 [[ "${1:-}" == "--force" || "${1:-}" == "-f" ]] && FORCE=1
 
@@ -44,7 +56,9 @@ cd "$(dirname "$0")"
 
 die() { echo "Error: $*" >&2; exit 1; }
 
-command -v unzip >/dev/null 2>&1 || die "'unzip' is not installed."
+for tool in unzip gzip python3; do
+    command -v "$tool" >/dev/null 2>&1 || die "'$tool' is not installed."
+done
 if command -v curl >/dev/null 2>&1; then
     download() { curl -fL --retry 3 --progress-bar -o "$2" "$1"; }
 elif command -v wget >/dev/null 2>&1; then
@@ -97,5 +111,28 @@ fetch() {
 
 fetch "BIOGRID-SYSTEM-LATEST.tab3" "$SYSTEM_URL" "$SYSTEM_DIR" "${SYSTEM_PATTERNS[@]}"
 fetch "BIOGRID-ORGANISM-$ORGANISM_VERSION.mitab" "$ORGANISM_URL" "$ORGANISM_DIR" "${ORGANISM_PATTERNS[@]}"
+
+# Orthology (OMA)
+oma_done=1
+for g in "${OMA_OTHER_GENOMES[@]}"; do
+    [[ -f "$OMA_DIR/OMA-Pairs-$OMA_BASE_GENOME-$g.csv" ]] || oma_done=0
+done
+if [[ $FORCE -eq 0 && $oma_done -eq 1 ]]; then
+    echo "==> OMA orthology: already present in $OMA_DIR/ (use --force to re-download)"
+else
+    python3 -I oma_pairs.py "$OMA_DIR" "$OMA_BASE_GENOME" "${OMA_OTHER_GENOMES[@]}"
+fi
+
+# Essentiality
+if [[ $FORCE -eq 0 && -f "$ESSENTIAL_DIR/$ESSENTIAL_FILE" ]]; then
+    echo "==> Essentiality: already present in $ESSENTIAL_DIR/ (use --force to re-download)"
+else
+    echo "==> Downloading essentiality data ..."
+    mkdir -p "$ESSENTIAL_DIR"
+    download "$ESSENTIAL_URL" "$TMP_DIR/$ESSENTIAL_FILE.gz"
+    gzip -dc "$TMP_DIR/$ESSENTIAL_FILE.gz" > "$TMP_DIR/$ESSENTIAL_FILE"
+    mv -f "$TMP_DIR/$ESSENTIAL_FILE" "$ESSENTIAL_DIR/$ESSENTIAL_FILE"
+    echo "    $ESSENTIAL_DIR/$ESSENTIAL_FILE"
+fi
 
 echo "==> Done."
