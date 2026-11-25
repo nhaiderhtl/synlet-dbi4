@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synthetische Letalität im Speziesvergleich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700&family=Red+Hat+Text:wght@400;500;600&display=swap">
+<style>
+/* VOICE work: a lab report for a school/research team, calm and exact
+   IDEA a scientific poster: one oxford-blue title band, white panels, small multiples on one scale
+   PICTURE three species panels side by side, same log scale, showing how much SL evidence each species has
+   COLOUR oxford blue band, white panels, species colours (human blue, E. coli orange, rat aqua), magenta for the key result
+   TYPE Red Hat Display 700 for titles and figures, Red Hat Text for body
+   LAYOUT laptop: band with title + finding, then 3 panels in a row; 720px: panels stay 3-up but compact; phone: stacked */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#070f26);--ink:light-dark(#0b1630,#e8ecf6);--mute:light-dark(#4a5570,#a9b3cc);--line:light-dark(#dfe3ec,#1f2a48);--panel:light-dark(#f4f6fa,#0d1838);--band:#0b1f4b;--bandink:#ffffff;--acc:light-dark(#e0115f,#ff4d8d);--hu:light-dark(#2a78d6,#5598e7);--ec:light-dark(#eb6834,#f0814f);--ra:light-dark(#14946a,#2cc58f);--gray:light-dark(#a3a29c,#5f6b85)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Red Hat Text",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,.big{font-family:"Red Hat Display",system-ui,sans-serif;letter-spacing:-.02em}
+h1{font-size:clamp(32px,4.6vw,50px);line-height:1.05;margin:0 0 14px;text-wrap:balance;max-width:24ch}
+h2{font-size:clamp(24px,3vw,32px);line-height:1.1;margin:0 0 10px;text-wrap:balance;max-width:34ch}
+h3{font-size:18px;margin:22px 0 8px}
+p{margin:0 0 12px;max-width:70ch}
+.band{padding-block:clamp(28px,4vw,56px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.top{background:var(--band);color:var(--bandink)}
+.top .lead{font-size:18px;max-width:62ch;color:#d9e1f5}
+.top .lead b{color:#fff}
+.panels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:26px}
+.pan{background:#fff;color:#0b1630;border-radius:6px;padding:18px 18px 16px;border-top:6px solid var(--c)}
+:root[data-theme=dark] .pan{background:#0d1838;color:#e8ecf6}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .pan{background:#0d1838;color:#e8ecf6}}
+.pan h3{margin:0;font-size:20px}
+.pan .sci{font-size:13px;color:var(--mute)}
+.pan .big{font-size:clamp(34px,4vw,48px);font-weight:700;line-height:1;margin:14px 0 2px}
+.pan .cap{font-size:14px;color:var(--mute);margin-bottom:12px}
+.pan .verdict{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:14px}
+.pan .verdict b{color:var(--acc)}
+.lg{display:grid;grid-template-columns:10.5em minmax(0,1fr) 4.6em;gap:4px 8px;align-items:center;font-size:13px}
+.lg .t{height:12px;background:var(--panel);border-radius:2px;position:relative}
+.lg .t i{position:absolute;inset:0 auto 0 0;background:var(--c);border-radius:0 3px 3px 0}
+.lg .v{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lg .z{color:var(--mute)}
+.note{font-size:13px;color:#b8c3e0;margin-top:14px}
+nav.scroll{display:flex;gap:6px;overflow-x:auto;padding:10px max(5vw,16px);border-bottom:1px solid var(--line);background:var(--bg)}
+nav.scroll a{flex:none;color:var(--ink);text-decoration:none;font-size:14px;padding:10px 12px;border-radius:4px}
+nav.scroll a:hover,nav.scroll a:focus-visible{background:var(--panel);outline:2px solid transparent}
+@media(min-width:900px){nav.scroll{position:sticky;top:0;z-index:5}}
+section{border-bottom:1px solid var(--line)}
+.two{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:start}
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:12px;margin:18px 0 8px}
+.fg{background:var(--panel);border-radius:6px;padding:12px 14px}
+.fg .big{font-size:clamp(26px,3vw,34px);font-weight:700;line-height:1.1;white-space:nowrap}
+.fg span{display:block;font-size:13px;color:var(--mute)}
+.fg.hot .big{color:var(--acc)}
+.bars{display:grid;grid-template-columns:max-content minmax(0,1fr) max-content;gap:6px 10px;align-items:center;font-size:14px;margin:8px 0 6px}
+.bars .t{height:14px;position:relative}
+.bars .t i{position:absolute;inset:0 auto 0 0;background:var(--c,var(--hu));border-radius:0 3px 3px 0;min-width:2px}
+.bars .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--mute);white-space:nowrap}
+.cap2{font-size:13px;color:var(--mute);margin:4px 0 0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:8px 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;font-size:14px;color:var(--mute)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+code{font-size:.92em;background:var(--panel);padding:1px 5px;border-radius:3px;overflow-wrap:anywhere}
+pre{background:var(--panel);padding:14px 16px;border-radius:6px;overflow-x:auto;font-size:14px;margin:0}
+.codebox{position:relative;margin:12px 0}
+.copy{position:absolute;top:8px;right:8px;min-height:36px;padding:6px 12px;font:600 14px "Red Hat Text",sans-serif;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;cursor:pointer}
+.copy:focus-visible{outline:2px solid var(--hu);outline-offset:2px}
+.fig{position:relative;min-height:300px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+svg text{font:13px "Red Hat Text",sans-serif;fill:var(--mute);paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.tag{display:inline-block;font-size:13px;padding:1px 8px;border-radius:10px;background:var(--panel);white-space:nowrap}
+.tag.z{background:color-mix(in srgb,var(--acc) 14%,transparent)}
+.tag.e{background:color-mix(in srgb,var(--ra) 18%,transparent)}
+ol.steps{padding-left:1.3em;max-width:70ch}
+ol.steps li{margin-bottom:8px}
+.cells{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cell{background:var(--panel);border-radius:6px;padding:12px;display:flex;gap:12px;align-items:center;font-size:14px}
+.cell svg{flex:none}
+.cell b{display:block;font-size:15px}
+.dead b{color:var(--acc)}
+ul.tasks{list-style:none;padding:0;max-width:72ch}
+ul.tasks li{padding:8px 0 8px 30px;position:relative;border-bottom:1px solid var(--line)}
+ul.tasks li::before{content:"";position:absolute;left:2px;top:12px;width:14px;height:14px;border:2px solid var(--mute);border-radius:3px}
+footer{font-size:13px;color:var(--mute)}
+@media(max-width:900px){.two{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.panels{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){table{font-size:13px}th,td{padding:6px 4px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right}.stack td::before{content:attr(data-l);color:var(--mute);text-align:left}.cells{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<header class="band top">
+ <div class="wrap">
+  <h1>Nur der Mensch hat echte SL-Daten. E.&nbsp;coli liefert Kandidaten, die Ratte gar nichts.</h1>
+  <p class="lead">Analyse der BioGRID-Daten unseres Projekts: <b>wie man synthetisch letale Genpaare findet</b>, wie sie pro Spezies verteilt sind und <b>ob sie sich auf den Menschen übertragen lassen</b>. Abbildung auf den Menschen bisher nur über Gensymbole, echte Orthologie-Daten folgen.</p>
+  <div class="panels" id="panels"></div>
+  <p class="note">Balken: Interaktionen, bei denen beide Gene aus derselben Spezies stammen; gemeinsame logarithmische Skala. Mensch-SL aus der SL-Datei (<span id="slfile"></span>), Rest aus den Organismus-Dateien 4.4.225.</p>
+ </div>
+</header>
+<nav class="scroll" aria-label="Abschnitte">
+ <a href="#idee">Grundidee</a><a href="#finden">SL finden</a><a href="#mensch">Mensch</a><a href="#ecoli">E. coli</a><a href="#ratte">Ratte</a><a href="#abbildung">Abbildung auf Mensch</a><a href="#transfer">Übertragbarkeit</a><a href="#tasks">Fazit &amp; Tasks</a>
+</nav>
+<main>
+<section class="band" id="idee"><div class="wrap two">
+ <div>
+  <h2>Synthetisch letal heißt: einzeln harmlos, zusammen tödlich</h2>
+  <p>Zellen haben für viele lebenswichtige Aufgaben zwei Wege, wie zwei Brücken über einen Fluss. Fällt eine aus, reicht die andere. Erst wenn <b>beide</b> Gene ausgeschaltet sind, stirbt die Zelle. Dieses Genpaar heißt <b>synthetisch letal (SL)</b>.</p>
+  <p>Für die Krebsmedizin ist das wertvoll: Hat ein Tumor Gen A schon durch Mutation verloren, tötet ein Medikament gegen Gen B nur die Tumorzellen (z.B. <i>BRCA</i>-Mutation + PARP-Hemmer).</p>
+  <p>SL ist eine Eigenschaft eines <b>Genpaares</b>. Gemessen wird es aber <b>in Zellen</b>: bei Bakterien im ganzen Einzeller, beim Menschen in <b>Zelllinien</b>, meist Krebszellen im Labor.</p>
+ </div>
+ <div class="cells" id="cells"></div>
+</div></section>
+
+<section class="band" id="finden"><div class="wrap">
+ <h2>SL steht an zwei Stellen in den Daten, und nur Paare innerhalb einer Spezies zählen</h2>
+ <div class="scroll"><table class="stack">
+  <thead><tr><th>Datei</th><th>Spalte</th><th>Filter</th></tr></thead>
+  <tbody>
+   <tr><td data-l="Datei">SL-Datei (TAB 3.0)</td><td data-l="Spalte"><code>Experimental System</code></td><td data-l="Filter"><code>Synthetic Lethality</code> (gilt für alle Zeilen)</td></tr>
+   <tr><td data-l="Datei">SL-Datei (TAB 3.0)</td><td data-l="Spalte"><code>Organism ID Interactor A/B</code></td><td data-l="Filter">Mensch 9606, Ratte 10116, E. coli K-12 83333 / 511145 / 316407 / 595496</td></tr>
+   <tr><td data-l="Datei">Organismus-Datei (MITAB)</td><td data-l="Spalte"><code>Interaction Types</code></td><td data-l="Filter"><code>MI:2370</code> synthetic lethality (explizit)</td></tr>
+   <tr><td data-l="Datei">Organismus-Datei (MITAB)</td><td data-l="Spalte"><code>Interaction Types</code> + <code>Confidence Values</code></td><td data-l="Filter"><code>MI:2373</code> negative genetic interaction mit Score; sehr negativ = SL-Kandidat</td></tr>
+  </tbody>
+ </table></div>
+ <p>Eine <b>negative genetische Interaktion</b> heißt: Die Doppelmutante wächst schlechter als erwartet, von „krank“ bis „tot“. Zeilen mit Genen aus zwei verschiedenen Spezies sind Spezialexperimente und sagen nichts über SL innerhalb einer Spezies.</p>
+ <div class="codebox"><button class="copy" id="copysql" type="button">Kopieren</button><pre id="sql">-- Alle SL-Genpaare innerhalb des Menschen
+SELECT "Official Symbol Interactor A", "Official Symbol Interactor B", "Author", "Qualifications"
+FROM sl
+WHERE "Experimental System" = 'Synthetic Lethality'
+  AND "Organism ID Interactor A" = 9606
+  AND "Organism ID Interactor B" = 9606;</pre></div>
+ <h3>Wer hat überhaupt SL-Daten? (ganze SL-Datei)</h3>
+ <div class="bars" id="orgbars"></div>
+ <p class="cap2">Logarithmische Balkenlänge. Hefe dominiert; Ratte kommt nicht vor, E. coli nur in einem Experiment mit Hefe.</p>
+</div></section>
+
+<section class="band" id="mensch"><div class="wrap">
+ <h2>Mensch: wenige Köder-Gene, fast nur Krebszelllinien, kaum Wiederholungen</h2>
+ <div class="figs" id="hfigs"></div>
+ <div class="two">
+  <div><h3>Gene mit den meisten SL-Partnern</h3><div class="bars" id="htop"></div>
+   <p class="cap2">KRAS, CSK, FBXW7 wurden gezielt als „Köder“ gegen tausende Partner getestet. Die Verteilung zeigt also auch, <b>wonach geforscht wurde</b>.</p></div>
+  <div><h3>Wie viele SL-Partner hat ein Gen?</h3><div class="bars" id="hdeg"></div>
+   <h3>Messmethode</h3><div class="bars" id="hmeth"></div></div>
+ </div>
+ <h3>In welchen Zelllinien wurde gemessen?</h3>
+ <p>Die Zelllinie steht als Freitext in <code>Qualifications</code>; wir haben bekannte Namen herausgesucht. Alle benannten Linien sind <b>Krebszellen</b>, und fast jede stammt aus einer einzigen Studie mit einem einzigen Köder-Gen.</p>
+ <div class="scroll"><table class="stack" id="hcl"></table></div>
+ <p id="hrep"></p>
+</div></section>
+
+<section class="band" id="ecoli"><div class="wrap">
+ <h2 id="ectitle"></h2>
+ <div class="two">
+  <div>
+   <p>Für <i>E. coli</i> K-12 gibt es keine explizite SL innerhalb der Spezies. Dafür haben große Screens (Babu 2011/2014, Kumar 2016, Gagarinova 2016/2022) im Stamm W3110 fast jedes Gen mit vielen anderen kombiniert. Für SL zählen die <b>negativen</b> Interaktionen.</p>
+   <p>Der Score sagt, wie viel schlechter die Doppelmutante wächst. Bei Babu 2011 ist er bei <b>−20 gedeckelt</b>: stärker kann die Methode nicht messen, die Zelle wächst praktisch nicht. Diese Paare nehmen wir als <b>SL-Kandidaten</b>.</p>
+  </div>
+  <div><div class="fig" id="hist" role="img" aria-label="Histogramm der Scores negativer genetischer Interaktionen in E. coli"><svg id="histsvg"></svg></div></div>
+ </div>
+ <div class="two">
+  <div><h3>Wie viele Paare je nach Schwelle?</h3><div class="scroll"><table id="ethr"></table></div>
+   <h3>Die Studien nutzen verschiedene Skalen</h3><div class="scroll"><table id="estud"></table></div></div>
+  <div><h3>Gene mit den meisten Kandidaten-Partnern</h3><div class="bars" id="etop"></div>
+   <p class="cap2"><code>ptsH</code>/<code>ptsI</code> (Zuckeraufnahme) und <code>ackA</code> (Energie) sind zentrale Stoffwechselgene. Gene mit y-Namen haben noch keine bekannte Funktion. Das Netz ist viel dichter als beim Menschen, weil systematisch gemessen wurde.</p></div>
+ </div>
+</div></section>
+
+<section class="band" id="ratte"><div class="wrap two">
+ <div>
+  <h2>Ratte: keine einzige SL-Messung in BioGRID</h2>
+  <p>Die Ratten-Datei besteht fast nur aus <b>physikalischen</b> Interaktionen (welche Proteine aneinander binden). Innerhalb der Ratte gibt es nur <b id="ratgen"></b> genetische Interaktionen, keine davon SL.</p>
+  <p><b>Mit unseren Daten lässt sich nicht feststellen, welche Ratten-Gene synthetisch letal sind.</b> Möglich ist nur der umgekehrte Weg: SL-Paare vom Menschen als Hypothese auf die Ratte übertragen.</p>
+ </div>
+ <div><h3>Ratte × Ratte: Art der Interaktion</h3><div class="bars" id="rtypes"></div>
+  <h3>Mit welcher Spezies interagieren die Ratten-Gene?</h3><div class="bars" id="rpart"></div></div>
+</div></section>
+
+<section class="band" id="abbildung"><div class="wrap">
+ <h2>Abbildung auf den Menschen: bei der Ratte ein brauchbarer Behelf, bei E. coli unbrauchbar</h2>
+ <p>Gene in zwei Spezies, die vom selben Vorfahren-Gen abstammen, heißen <b>Orthologe</b> und haben meist dieselbe Aufgabe, oft aber andere Namen (<code>recA</code> ↔ <i>RAD51</i>, <code>mutS</code> ↔ <i>MSH2</i>). Echte Orthologie-Daten liegen noch nicht im Repo; hier wird behelfsweise über <b>gleiche Gensymbole</b> verglichen.</p>
+ <div class="two">
+  <div><h3>Ratte → Mensch</h3><div class="bars" id="rcov"></div>
+   <p class="cap2" id="rcovtxt"></p>
+   <p>Die niedrige Abdeckung liegt an <b>fehlenden Daten</b>: Die Datei enthält nur Ratten-Gene mit irgendeiner erfassten Interaktion, das Genom hat über 20.000. Für den Großteil der menschlichen Gene gibt es ein 1:1-Gegenstück in der Ratte.</p>
+   <h3>E. coli-Kandidaten → Mensch</h3><div class="bars" id="funnel"></div>
+   <p class="cap2">Kein Paar wird per Name gefunden. Das liegt an der Methode, nicht an der Biologie.</p></div>
+  <div><h3 id="enametitle"></h3><div class="scroll"><table class="stack" id="ename"></table></div>
+   <p class="cap2">Einordnung aus Lehrbuchwissen, nicht aus den Daten. Sie zeigt, warum Namensgleichheit nichts beweist.</p></div>
+ </div>
+</div></section>
+
+<section class="band" id="transfer"><div class="wrap">
+ <h2>Übertragbar ist SL nur, wenn Gene, Aufgabe und Ersatzweg beim Menschen gleich sind</h2>
+ <div class="two">
+  <div>
+   <h3>Alle Bedingungen müssen erfüllt sein</h3>
+   <ol class="steps">
+    <li><b>Beide Gene haben ein menschliches Ortholog</b>, am besten 1:1. Mehrere Kopien können sich gegenseitig ersetzen.</li>
+    <li><b>Die Aufgabe ist dieselbe</b>: beide im selben Stoffwechsel- oder Reparaturweg.</li>
+    <li><b>Kein dritter Weg</b> fängt beim Menschen den Ausfall ab. Hier unterscheiden sich Spezies am häufigsten.</li>
+    <li><b>Keines der Gene ist allein schon lebenswichtig</b>, sonst ist es nicht <i>synthetisch</i> letal.</li>
+    <li><b>Der Zellkontext passt</b>: Schon zwischen menschlichen Krebszelllinien gilt SL selten gleich.</li>
+   </ol>
+   <h3>So überträgt man ein SL-Paar konkret</h3>
+   <ol class="steps">
+    <li>SL-Paar in Spezies X nehmen, z.B. ein E. coli-Paar mit Score ≤ −20.</li>
+    <li>Für beide Gene das menschliche Ortholog nachschlagen (NCBI, OMA). Ohne Ortholog fällt das Paar weg.</li>
+    <li>Prüfen, ob das menschliche Paar schon als SL bekannt ist: dann ist SL <b>konserviert</b>.</li>
+    <li>Prüfen, ob eines der Gene beim Menschen allein essentiell ist: dann verwerfen.</li>
+    <li>In einer menschlichen Zelllinie beide Gene ausschalten (CRISPR) und testen, ob die Zellen sterben.</li>
+   </ol>
+   <p>So ist z.B. Srivas et al. (2016) vorgegangen, eine der großen Studien im Mensch-Datensatz: SL-Paare aus Hefe wurden über Orthologe übertragen und in HeLa-Zellen getestet; nur ein Teil bestätigte sich.</p>
+  </div>
+  <div class="scroll"><table class="stack">
+   <thead><tr><th></th><th>Ratte → Mensch</th><th>E. coli → Mensch</th></tr></thead>
+   <tbody>
+    <tr><td data-l="">Verwandtschaft</td><td data-l="Ratte">sehr nah, beide Säugetiere</td><td data-l="E. coli">extrem entfernt, Bakterium</td></tr>
+    <tr><td data-l="">Orthologe</td><td data-l="Ratte">großer Teil, meist 1:1</td><td data-l="E. coli">nur Kernprozesse</td></tr>
+    <tr><td data-l="">SL-Daten bei uns</td><td data-l="Ratte"><span class="tag z">keine</span></td><td data-l="E. coli"><span class="tag" id="tcand"></span></td></tr>
+    <tr><td data-l="">Übertragbarkeit</td><td data-l="Ratte"><span class="tag e">hoch plausibel</span>, aber unbelegt</td><td data-l="E. coli"><span class="tag z">gering</span></td></tr>
+    <tr><td data-l="">Sinnvoll für</td><td data-l="Ratte">Signalwege, Krebsgene; Ratte als Tiermodell</td><td data-l="E. coli">DNA-Reparatur, Replikation, Nukleotid- und Grundstoffwechsel, Protein-Qualitätskontrolle</td></tr>
+    <tr><td data-l="">Nie übertragbar</td><td data-l="Ratte">wenige artspezifische Gene</td><td data-l="E. coli">Zellwand, Geißel, Zucker-Transport (<code>ptsH</code>), viele y-Gene</td></tr>
+    <tr><td data-l="">Richtung in der Praxis</td><td data-l="Ratte">Mensch → Ratte (Hypothese im Tier prüfen)</td><td data-l="E. coli">E. coli → Mensch, nur als Ideengeber</td></tr>
+   </tbody>
+  </table></div>
+ </div>
+</div></section>
+
+<section class="band" id="tasks"><div class="wrap two">
+ <div>
+  <h2>Fazit</h2>
+  <p><b>SL finden:</b> SL-Datei nach <code>Organism ID</code> filtern bzw. MITAB nach <code>MI:2370</code> (explizit) oder <code>MI:2373</code> mit Score (Kandidaten); nur Paare innerhalb einer Spezies zählen.</p>
+  <p id="fz1"></p>
+  <p><b>Übertragbarkeit:</b> Ratte biologisch gut, aber ohne Ratten-SL nichts zu übertragen; sinnvoll ist Mensch → Ratte. E. coli nur für konservierte Kernprozesse und nur mit echten Orthologie-Daten prüfbar. SL ist kontextabhängig; Übertragung liefert Hypothesen, die im Labor bestätigt werden müssen.</p>
+ </div>
+ <div>
+  <h2>Offene Tasks</h2>
+  <ul class="tasks">
+   <li><b>Orthologie-Daten ergänzen</b> (über <code>install.sh</code>, nicht committen): NCBI <code>gene_orthologs.gz</code> für Ratte ↔ Mensch, OMA- oder eggNOG-Paare für E. coli ↔ Mensch; danach Abbildung und Übertragbarkeit neu rechnen.</li>
+   <li>Optional: Gen-Essentialität beim Menschen (z.B. DepMap) ergänzen, um allein letale Gene auszusortieren.</li>
+   <li>Optional: SL-Datei und Organismus-Dateien auf dieselbe BioGRID-Version bringen.</li>
+  </ul>
+  <footer><p>Quelle: BioGRID (thebiogrid.org), Auswertung im Notebook <code>analysis/synthetic_lethality_analyse.ipynb</code>; Ergebnistabellen in <code>analysis/results/</code>.</p></footer>
+ </div>
+</div></section>
+</main>
+<script type="application/json" id="data">__DATA__</script>
+<script>
+{
+const D = JSON.parse(document.getElementById('data').textContent);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = (n, d = 0) => Number(n).toLocaleString('de-DE', {minimumFractionDigits: d, maximumFractionDigits: d});
+const $ = id => document.getElementById(id);
+const SP = {'Mensch': ['--hu', 'Homo sapiens'], 'E. coli K-12': ['--ec', 'Escherichia coli K-12'], 'Ratte': ['--ra', 'Rattus norvegicus']};
+
+function bars(el, rows, opt = {}) {
+  const max = opt.max ?? Math.max(...rows.map(r => r[1]), 1);
+  const w = v => opt.log ? (v > 0 ? Math.log10(v + 1) / Math.log10(max + 1) * 100 : 0) : v / max * 100;
+  el.innerHTML = rows.map(([k, v, c]) =>
+    `<span>${esc(k)}</span><span class="t"><i style="width:${w(v).toFixed(2)}%;--c:var(${c || opt.c || '--hu'})"></i></span><span class="v">${opt.pct ? nf(v, 1) + ' %' : nf(v)}</span>`).join('');
+}
+
+// first-screen panels: small multiples on one log scale
+$('slfile').textContent = D.sl_file;
+const metrics = [['gesamt', 'Interaktionen gesamt'], ['gen', 'davon genetisch'], ['neg', 'negativ genetisch'], ['sl', 'SL explizit']];
+const allVals = Object.values(D.overview).flatMap(o => [o['Interaktionen gesamt']]);
+const LMAX = Math.log10(Math.max(...allVals) + 1);
+const panelInfo = {
+  'Mensch': [nf(D.overview['Mensch']['SL explizit (MI:2370)']), 'explizite SL-Einträge', 'Ist das Ziel. SL vor allem in Krebszelllinien gemessen.'],
+  'E. coli K-12': [nf(D.ecoli.cand_pairs), 'SL-Kandidaten (Score ≤ −20), 0 explizite SL', 'Übertragbarkeit <b>gering</b>, nur für konservierte Kernprozesse.'],
+  'Ratte': ['0', 'SL-Einträge, fast nur Protein-Bindungen', 'Übertragbarkeit <b>plausibel</b>, aber nichts zu übertragen.'],
+};
+$('panels').innerHTML = ['Mensch', 'E. coli K-12', 'Ratte'].map(sp => {
+  const o = D.overview[sp];
+  const vals = [o['Interaktionen gesamt'], o['davon genetisch'], o['negativ genetisch (MI:2373)'], o['SL explizit (MI:2370)']];
+  const rows = vals.map((v, i) => `<span>${metrics[i][1]}</span><span class="t"><i style="width:${v > 0 ? (Math.log10(v + 1) / LMAX * 100).toFixed(1) : 0}%"></i></span><span class="v${v ? '' : ' z'}">${nf(v)}</span>`).join('');
+  const [big, cap, verdict] = panelInfo[sp];
+  return `<div class="pan" style="--c:var(${SP[sp][0]})"><h3>${esc(sp)}</h3><div class="sci"><i>${SP[sp][1]}</i></div>
+    <div class="big">${big}</div><div class="cap">${cap}</div><div class="lg">${rows}</div>
+    <div class="verdict">→ Mensch: ${verdict}</div></div>`;
+}).join('');
+
+// mechanism: four cell states
+const cellSvg = (a, b, dead) => `<svg width="58" height="58" viewBox="0 0 58 58" aria-hidden="true">
+  <circle cx="29" cy="29" r="26" fill="${dead ? 'none' : 'color-mix(in srgb, var(--ra) 22%, transparent)'}" stroke="${dead ? 'var(--acc)' : 'var(--ra)'}" stroke-width="2" ${dead ? 'stroke-dasharray="5 4"' : ''}/>
+  <rect x="13" y="22" width="12" height="14" rx="3" fill="${a ? 'var(--hu)' : 'none'}" stroke="var(--hu)" stroke-width="2"/>
+  <rect x="33" y="22" width="12" height="14" rx="3" fill="${b ? 'var(--ec)' : 'none'}" stroke="var(--ec)" stroke-width="2"/>
+  ${dead ? '<path d="M18 18 L40 40 M40 18 L18 40" stroke="var(--acc)" stroke-width="3" stroke-linecap="round"/>' : ''}</svg>`;
+$('cells').innerHTML = [[1, 1, 'Gen A + B aktiv', 'Zelle lebt'], [0, 1, 'Gen A aus', 'lebt, Weg B reicht'], [1, 0, 'Gen B aus', 'lebt, Weg A reicht'], [0, 0, 'A und B aus', 'Zelle stirbt: SL']]
+  .map(([a, b, t, r]) => `<div class="cell${a || b ? '' : ' dead'}">${cellSvg(a, b, !a && !b)}<div><b>${t}</b>${r}</div></div>`).join('');
+
+$('copysql').addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText($('sql').textContent); e.target.textContent = 'Kopiert'; }
+  catch { e.target.textContent = 'Bitte markieren und kopieren'; }
+  setTimeout(() => e.target.textContent = 'Kopieren', 2000);
+});
+
+const spOf = n => n === 'Homo sapiens' ? '--hu' : n.includes('Escherichia') ? '--ec' : n.includes('Rattus') ? '--ra' : '--gray';
+bars($('orgbars'), D.org_counts.map(([k, v]) => [k.replace('  ×  ', ' × '), v, spOf(k)]), {log: true});
+
+// human
+const H = D.human;
+$('hfigs').innerHTML = [[H.rows, 'SL-Einträge'], [H.pairs, 'verschiedene Genpaare'], [H.genes, 'verschiedene Gene'], [H.studies, 'Studien'], [nf(H.pairs_multi_study_pct, 1) + ' %', 'Paare von >1 Studie bestätigt', 1]]
+  .map(([v, l, hot]) => `<div class="fg${hot ? ' hot' : ''}"><div class="big">${typeof v === 'number' ? nf(v) : esc(v)}</div><span>${l}</span></div>`).join('');
+bars($('htop'), H.top_genes);
+bars($('hdeg'), H.degree_bins);
+bars($('hmeth'), H.methods.map(([k, v]) => [k, v, k === 'nicht angegeben' ? '--gray' : '--hu']));
+$('hcl').innerHTML = '<thead><tr><th>Zelllinie</th><th>Gewebe / Herkunft</th><th class="n">SL-Einträge</th><th class="n">Genpaare</th><th>Köder-Gen</th><th class="n">Studien</th></tr></thead><tbody>' +
+  H.cell_lines.map(r => `<tr><td data-l="Zelllinie"><b>${esc(r[0])}</b></td><td data-l="Gewebe">${esc(r[1])}</td><td class="n" data-l="SL-Einträge">${nf(r[2])}</td><td class="n" data-l="Genpaare">${nf(r[3])}</td><td data-l="Köder-Gen"><i>${esc(r[4])}</i></td><td class="n" data-l="Studien">${nf(r[5])}</td></tr>`).join('') + '</tbody>';
+$('hrep').innerHTML = `<b>Kontextabhängigkeit:</b> Nur ${nf(H.pairs_multi_study_pct, 1)} % der Genpaare wurden von mehr als einer Studie gefunden, nur ${nf(H.pairs_multi_cellline)} in mehr als einer benannten Zelllinie. Wenn SL schon zwischen menschlichen Krebszellen nicht automatisch gilt, dann erst recht nicht zwischen Spezies.`;
+
+// E. coli
+const E = D.ecoli;
+$('ectitle').textContent = `E. coli: keine explizite SL, aber ${nf(E.cand_pairs)} starke Kandidaten bei ${nf(E.cand_genes)} Genen`;
+$('ethr').innerHTML = '<thead><tr><th>Schwelle</th><th class="n">Genpaare</th><th class="n">Gene</th></tr></thead><tbody>' +
+  E.thresholds.map(r => `<tr${r.Schwelle.includes('-20') ? ' style="font-weight:600"' : ''}><td>${esc(r.Schwelle.replace('-', '−'))}</td><td class="n">${nf(r.Genpaare)}</td><td class="n">${nf(r.Gene)}</td></tr>`).join('') + '</tbody>';
+$('estud').innerHTML = '<thead><tr><th>Studie</th><th class="n">Zeilen</th><th class="n">stärkster</th><th class="n">Median</th></tr></thead><tbody>' +
+  E.studies.map(r => `<tr><td>${esc(r[0])}</td><td class="n">${nf(r[1])}</td><td class="n">${nf(r[2], 1)}</td><td class="n">${nf(r[3], 1)}</td></tr>`).join('') + '</tbody>';
+bars($('etop'), E.top_genes, {c: '--ec'});
+
+const hs = $('histsvg');
+const drawHist = () => {
+  const W = hs.clientWidth, H2 = hs.clientHeight, m = {l: 52, r: 12, t: 16, b: 40};
+  const edges = E.hist.edges, cnt = E.hist.counts, ymax = Math.max(...cnt);
+  const x = v => m.l + (v - edges[0]) / (edges[edges.length - 1] - edges[0]) * (W - m.l - m.r);
+  const y = v => H2 - m.b - v / ymax * (H2 - m.t - m.b);
+  const step = W < 520 ? 10 : 5;
+  let s = '';
+  for (let t = 0; t <= ymax; t += 5000) s += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--line)"/><text x="${m.l - 8}" y="${y(t) + 4}" text-anchor="end">${nf(t)}</text>`;
+  cnt.forEach((c, i) => { if (c) s += `<rect x="${x(edges[i]) + 1}" y="${y(c)}" width="${Math.max(x(edges[i + 1]) - x(edges[i]) - 2, 1)}" height="${H2 - m.b - y(c)}" fill="var(--ec)" rx="1"/>`; });
+  for (let t = -25; t <= 0; t += step) s += `<text x="${x(t)}" y="${H2 - m.b + 18}" text-anchor="middle">${t ? '−' + Math.abs(t) : 0}</text>`;
+  s += `<text x="${(m.l + W - m.r) / 2}" y="${H2 - 4}" text-anchor="middle">Score (negativer = Doppelmutante wächst schlechter)</text>`;
+  const xa = x(-19.75);
+  s += `<line x1="${xa + 4}" x2="${x(-16)}" y1="${y(ymax) + 10}" y2="${y(ymax) + 10}" stroke="var(--ink)"/><text x="${x(-16) + 6}" y="${y(ymax) + 14}" style="fill:var(--ink)">${nf(cnt[edges.findIndex(e => e > -20.3) ] || ymax)} Zeilen bei −20: SL-Kandidaten</text>`;
+  hs.innerHTML = s;
+};
+const roHist = new ResizeObserver(drawHist);
+roHist.observe(hs);
+
+// rat
+const R = D.rat;
+$('ratgen').textContent = nf(R.types.filter(([k]) => k.startsWith('phenotypic')).reduce((a, [, v]) => a + v, 0));
+bars($('rtypes'), R.types, {c: '--ra', log: true});
+bars($('rpart'), R.partners, {c: '--ra'});
+
+// mapping
+bars($('rcov'), [['SL-Gene (Mensch)', R.sl_genes_in_rat / R.human_sl_genes * 100], ['SL-Genpaare (Mensch)', R.pairs_in_rat / R.human_pairs * 100]], {c: '--ra', pct: true, max: 100});
+$('rcovtxt').textContent = `${nf(R.sl_genes_in_rat)} von ${nf(R.human_sl_genes)} menschlichen SL-Genen haben ein gleichnamiges Gen in den Ratten-Daten (${nf(R.genes)} Ratten-Gene). Bei ${nf(R.pairs_in_rat)} SL-Paaren kommen beide Gene vor: Hypothesen, die man in der Ratte testen könnte.`;
+const M = D.mapping;
+bars($('funnel'), [['SL-Kandidatenpaare', E.cand_pairs], ['beide Gene gleichnamig beim Menschen', M.both_named], ['davon beim Menschen SL', M.conserved]], {c: '--ec', log: true});
+$('enametitle').textContent = `E. coli-Gene mit gleichnamigem menschlichem SL-Gen (${M.ecoli_same_name_sl} von ${nf(E.genes)})`;
+const tagOf = v => v === 'Zufall' ? 'z' : (v === 'echt' || v === 'verwandt') ? 'e' : '';
+$('ename').innerHTML = '<thead><tr><th>E. coli</th><th>Mensch</th><th>Kandidat?</th><th>Orthologe?</th><th>Warum</th></tr></thead><tbody>' +
+  M.name_table.map(r => `<tr><td data-l="E. coli"><code>${esc(r[0])}</code></td><td data-l="Mensch"><i>${esc(r[1])}</i></td><td data-l="Kandidat?">${esc(r[2])}</td><td data-l="Orthologe?"><span class="tag ${tagOf(r[3])}">${esc(r[3])}</span></td><td data-l="Warum">${esc(r[4])}</td></tr>`).join('') + '</tbody>';
+$('tcand').textContent = `${nf(E.cand_pairs)} Kandidaten`;
+
+$('fz1').innerHTML = `<b>Verteilung:</b> Mensch ${nf(H.rows)} SL-Einträge, ${nf(H.pairs)} Paare, ${nf(H.genes)} Gene, wenige Hubs (KRAS, CSK, FBXW7), fast nur Krebszelllinien. E. coli ${nf(E.cand_pairs)} Kandidaten bei ${nf(E.cand_genes)} Genen in einem dichten, systematisch gemessenen Netz. Ratte: keine SL-Daten.`;
+}
+</script>
+</body>
+</html>
