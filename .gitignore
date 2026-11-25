@@ -1,29 +1,53 @@
-# --- BioGRID data (downloaded by ./install.sh, too large for git) ---
+# =========================================================================
+#  Data - downloaded by ./install.sh (removed by ./clean.sh), too big for git
+# =========================================================================
 BIOGRID-*/
-BIOGRID-*.zip
+OMA-Orthology/
+Essentiality/
+
+# data files anywhere else in the repo (e.g. moved or hand-edited copies)
 *.mitab.txt
 *.mitab.txt.csv
 *.tab3.txt
 *.tab3.txt.csv
 *.tab3.csv
+*.tsv
+*.tsv.gz
 
-# --- Archives / temp files ---
+# downloads / interrupted downloads
 *.zip
-*.tmp
+*.gz
+*.part
+
+# =========================================================================
+#  Generated output
+# =========================================================================
 *.log
+*.tmp
+# JSON reports from: python3 analyze_csv.py FILE --json report.json
+*report*.json
 
-# --- IDE (shared .idea project files stay tracked; see .idea/.gitignore) ---
-*.iml~
-.vscode/
-
-# --- OS junk ---
-.DS_Store
-Thumbs.db
-*~
-
-# --- Python / Jupyter ---
-.venv/
+# =========================================================================
+#  Python
+# =========================================================================
 __pycache__/
+*.py[cod]
+.venv/
+venv/
 .ipynb_checkpoints/
 
+# =========================================================================
+#  IDEs / editors
+# =========================================================================
 .idea/
+*.iml
+.vscode/
+*.swp
+*~
+
+# =========================================================================
+#  OS junk
+# =========================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
